@@ -38,24 +38,24 @@ const morseBtnHead = document.getElementById("morseBtnHead");
 var inputVal = "";
 var resultString = "";
 var problematicChar = [];
-// mode 1 =  ascii to morse code
-// mode 2 = morse code to ascii
-// mode 3 = morse code to ascii with simulation on
+// mode 1 =  latin to morse code
+// mode 2 = morse code to latin
+// mode 3 = morse code to latin with simulation on
 var mode = 1;
 
 // Main
-var asciiToMorse = buildMap(1);
-var morseToAscii = buildMap(2);
+var latinToMorse = buildMap(1);
+var morseToLatin = buildMap(2);
 
 input.addEventListener("input", function translate() {
     if (mode === 1) {
         getInput();
         inputVal = inputVal.toLowerCase();
         splitStr('');
-        if (checkCharacters(asciiToMorse)) {
+        if (checkCharacters(latinToMorse)) {
             errorContainer.style.background = "";
             error.style.opacity = "0";
-            concatStr(asciiToMorse);
+            concatStr(latinToMorse);
             res.value = resultString;
         } else {
             displayError();
@@ -216,14 +216,14 @@ function concatStr(usedMap) {
 function setMode(modeValue) {
     switch (modeValue) {
         case 1:
-            text1.textContent = "ASCII";
+            text1.textContent = "Latin";
             text2.textContent = "Morse";
             morseBtn.style.display = "none";
             mode = 1;
             break;
         case 2:
             text1.textContent = "Morse";
-            text2.textContent = "ASCII";
+            text2.textContent = "Latin";
             morseBtn.style.display = "flex";
             morseBtn.style.background = "#dbdbdb";
             morseBtnHead.style.left = "5px";
@@ -231,7 +231,7 @@ function setMode(modeValue) {
             break;
         case 3: 
             text1.textContent = "Morse";
-            text2.textContent = "ASCII";
+            text2.textContent = "Latin";
             morseBtn.style.display = "flex";
             morseBtn.style.background = "#5CD44C";
             morseBtnHead.style.left = "32px";
