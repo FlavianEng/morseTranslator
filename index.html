@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Morse translator</title>
+  <link rel="stylesheet" href="/css/style.min.css">
+  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+</head>
+
+<body class="container">
+  <h1 class="title">Morse translator</h1>
+  <div class="translator">
+    <!-- Part 1 -->
+    <div class="translator_part">
+      <div class="translator_header">
+        <p id="text1" class="translator_header_text1">ASCII</p>
+        <div id="morseBtn" class="translator_header_btn">
+          <div id="morseBtnHead" class="translator_header_btn_head"></div>
+        </div>
+      </div>
+      <div class="translator_console">
+        <div class="translator_console_input">
+          <textarea id="input"></textarea>
+          <i id="cross" class="fas fa-times"></i>
+          <div id="errorContainer" class="translator_console_error">
+            <p id="error"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Part 2 -->
+    <div class="translator_part translator_part_2">
+      <div class="translator_header">
+        <i id="exchangeBtn" class="fas fa-exchange-alt"></i>
+      </div>
+    </div>
+    <!-- Part 3 -->
+    <div class="translator_part">
+      <div class="translator_header">
+        <p id="text2" class="translator_header_text2">Morse</p>
+      </div>
+      <div class="translator_console">
+        <div class="translator_console_res">
+          <textarea id="res" readonly aria-readonly="true"></textarea>
+          <i id="copy" class="far fa-copy"></i>
+          <i id="copied">Copied</i>
+          <div class="translator_console_error">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- <script src="./dist/polyfill.bundle.js"></script>
+<script src="./dist/app.bundle.js"></script> -->
+<script src="script.js"></script>
+
+</html>

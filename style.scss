@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+$font : 'VT323', monospace;
+$fontSizeTitle : 2.5em;
+$fontSizeSubTitle: 2em;
+$fontSizeNormal : 1.2em;
+$breakpoint-tablet: 1105px;
+$i_color: #757575;
+$i_color_hover: #047CFC;
+
+@mixin flexBase ($direction, $justify) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+}
+
+@media (max-width: $breakpoint-tablet) {
+    .translator {
+        @include flexBase(column, space-evenly);
+
+        &_part {
+            &_2 {
+                align-self: center;
+                margin-top: 40px;
+            }
+        }
+    }
+
+}
+
+@media (min-width: $breakpoint-tablet + 1) {
+    .translator {
+        @include flexBase(row, space-evenly);
+    }
+}
+
+
+.container {
+    @include flexBase(column, space-evenly);
+    font-family: $font;
+    font-size: $fontSizeNormal;
+}
+
+.title {
+    font-size: $fontSizeTitle;
+    align-self: center;
+}
+
+.translator {
+    align-self: center;
+
+    &_part {
+        @include flexBase(column, center);
+
+        &_2 {
+            min-width: 100px;
+            width: 100%;
+        }
+    }
+
+    &_header {
+        @include flexBase(row, space-evenly);
+        align-items: center;
+        font-size: $fontSizeSubTitle;
+
+        &_text1 {
+            align-self: flex-start;
+        }
+
+        &_text2 {
+            align-self: flex-start;
+        }
+
+        & i {
+            align-self: center;
+        }
+
+        &_btn {
+            display: none;
+            width: 60px;
+            height: 30px;
+            border-radius: 25px;
+            background: #dbdbdb;
+            cursor: pointer;
+            &_head {
+                position: relative;
+                left: 5px;
+                align-self: center;
+                width: 23px;
+                height: 23px;
+                background: #FFF;
+                box-shadow: 0px 0px 3px grey;
+                border-radius: 25px;
+            }
+        }
+    }
+
+    & a {
+        width: 100px;
+        height: 100px;
+        color: black;
+        font-size: $fontSizeNormal;
+    }
+
+    & i {
+        color: $i_color;
+        transition: color 200ms;
+        cursor: pointer;
+
+        &:hover {
+            color: $i_color_hover;
+        }
+    }
+
+    &_console {
+        @include flexBase(row, space-between);
+
+        & textarea {
+            padding: 20px;
+            resize: none;
+            width: 500px;
+            height: 250px;
+            font-size: $fontSizeNormal;
+            font-family: $font;
+            border: solid black 2px;
+        }
+
+        &_error {
+            display: flex;
+            position: relative;
+            z-index: 1;
+            bottom: 73px;
+            left: 22px;
+            width: 500px;
+            height: 60px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &_input {
+            @include flexBase(column, center);
+
+            & > i {
+                position: relative;
+                left: 525px;
+                bottom: 280px;
+                font-size: 0.8em;
+                display: none;
+                line-height: 0;
+            }
+        }
+
+        &_res {
+            @include flexBase(column, center);
+            & i {
+                display: none;
+                position: relative;
+                line-height: 0;
+                left: 520px;
+                bottom: 24px;
+                font-size: 0.8em;
+            }
+
+            & #copied {
+                display: none   ;
+                color: $i_color_hover;
+                font-style: normal;
+                font-size: $fontSizeNormal;
+                left: 480px;
+                top: 13px;
+                cursor: default;
+            }
+
+        }
+    }
+}
+
+#res {
+    cursor: default;
+}
+
+#errorContainer {
+    color: #FFF;
+
+    &>p {
+        padding: 10px;
+        opacity: 0;
+    }
+}
