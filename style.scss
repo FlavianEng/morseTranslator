@@ -39,6 +39,7 @@ $i_color_hover: #047CFC;
     @include flexBase(column, space-evenly);
     font-family: $font;
     font-size: $fontSizeNormal;
+    overflow-x: hidden;
 }
 
 .title {

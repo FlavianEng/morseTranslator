@@ -41,7 +41,7 @@ var problematicChar = [];
 // mode 1 =  latin to morse code
 // mode 2 = morse code to latin
 // mode 3 = morse code to latin with simulation on
-var mode = 1;
+var mode = 2;
 
 // Main
 var latinToMorse = buildMap(1);
@@ -52,14 +52,58 @@ input.addEventListener("input", function translate() {
         getInput();
         inputVal = inputVal.toLowerCase();
         splitStr('');
-        if (checkCharacters(latinToMorse)) {
-            errorContainer.style.background = "";
-            error.style.opacity = "0";
+        if (checkCharacters(latinToMorse, inputVal)) {
+            hideError();
             concatStr(latinToMorse);
             res.value = resultString;
         } else {
             displayError();
         }
+    } else if (mode === 2) {
+        var inputStr = "";
+        getInput();
+        inputStr = inputVal.split(/\s/gm);
+        // console.log(inputStr);
+        if (checkCharacters(morseToLatin, inputStr)) {
+            hideError();
+            splitStr('\n');
+            // console.log(inputVal);
+            var lines = [];
+            for (i of inputVal) {
+                inputVal[i] = i.split(" ");
+                lines.push(inputVal[i]);
+            }
+            resultString = "";
+            for (line of lines) {
+                let counter = 0;
+                for (part of line) {
+                    if (morseToLatin.get(part) !== undefined){
+                        resultString += morseToLatin.get(part);
+                        counter += 1;   
+                    }
+                    if (part === "") {
+                        resultString += "\n";
+                    }
+                    if (counter === line.length) {
+                        resultString += "\n";
+                    }
+                }
+            }
+            res.value = resultString;
+        } else {
+            displayError(); 
+        }
+
+
+
+        // if (checkCharacters(morseToLatin)) {
+        //     hideError();
+        //     concatStr(morseToLatin);
+        //     res.value = resultString;
+        // } else {
+        //     displayError(); 
+        // }
+
     }
 
     if (input.value != "") {
@@ -153,24 +197,27 @@ function splitStr(spliter) {
  * Returns false if there is at least one unknown characters and calls displayError function
  * @param {*} usedMap Map which need to used
  */
-function checkCharacters(usedMap) {
+function checkCharacters(usedMap, str) {
     let i = 0;
-    for (character of inputVal) {
+    for (character of str) {
         if (usedMap.get(character) === undefined) {
-            if (problematicChar.includes(character) === false) {
+            if (problematicChar.includes(character) === false && character !== "") {
                 problematicChar.push(character);
+            } else {
+                i = i + 1;
             }
         } else {
             i = i + 1;
         }
     }
     for (char of problematicChar) {
-        if (inputVal.includes(char) === false) {
+        if (str.includes(char) === false) {
             problematicChar.splice(char, 1);
         }
     }
 
-    if (i == inputVal.length) {
+
+    if (i == str.length) {
         return true;
     } else {
         displayError();
@@ -178,10 +225,16 @@ function checkCharacters(usedMap) {
     }
 };
 
+function hideError()  {
+    errorContainer.style.background = "";
+    error.style.opacity = "0";
+}
+
 /**
  * Diplays characters not supported in the input textarea
  */
 function displayError() {
+    console.error(problematicChar); 
     if (inputVal.includes(problematicChar[length])) {
         errorContainer.setAttribute("aria-hidden", "false");
         errorContainer.style.background = "#F97D71";
@@ -197,15 +250,21 @@ function displayError() {
  */
 function concatStr(usedMap) {
     resultString = "";
-
     for (character of inputVal) {
-        if (character === "\n") {
+        if (mode === 1) {
+            if (character === "\n") {
+                resultString += usedMap.get(character);
+            } else {
+                resultString += usedMap.get(character) + " ";
+            }
+        } else if (mode === 2) {
             resultString += usedMap.get(character);
-        } else {
-            resultString += usedMap.get(character) + " ";
         }
     }
-    resultString = resultString.slice(0, -1);
+
+    if (mode === 1) {
+        resultString = resultString.trim();
+    }
 };
 
 /**
