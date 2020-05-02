@@ -1,6 +1,5 @@
 /**
  * Author: Flavian Engevin
- * Version : 1.00
 */ 
 var morseAlphabet = [
     // Letters
@@ -37,11 +36,12 @@ const morseBtnHead = document.getElementById("morseBtnHead");
 // Globals var
 var inputVal = "";
 var resultString = "";
-var problematicChar = [];
+var errorList = [];
+var errorDisplayed = false;
 // mode 1 =  latin to morse code
 // mode 2 = morse code to latin
 // mode 3 = morse code to latin with simulation on
-var mode = 2;
+var mode = 1;
 
 // Main
 var latinToMorse = buildMap(1);
@@ -53,11 +53,11 @@ input.addEventListener("input", function translate() {
         inputVal = inputVal.toLowerCase();
         splitStr('');
         if (checkCharacters(latinToMorse, inputVal)) {
-            hideError();
+            showError();
             concatStr(latinToMorse);
             res.value = resultString;
         } else {
-            displayError();
+            showError();
         }
     } else if (mode === 2) {
         var inputStr = "";
@@ -65,9 +65,8 @@ input.addEventListener("input", function translate() {
         inputStr = inputVal.split(/\s/gm);
         // console.log(inputStr);
         if (checkCharacters(morseToLatin, inputStr)) {
-            hideError();
+            showError();
             splitStr('\n');
-            // console.log(inputVal);
             var lines = [];
             for (i of inputVal) {
                 inputVal[i] = i.split(" ");
@@ -77,9 +76,9 @@ input.addEventListener("input", function translate() {
             for (line of lines) {
                 let counter = 0;
                 for (part of line) {
-                    if (morseToLatin.get(part) !== undefined){
+                    if (morseToLatin.get(part) !== undefined) {
                         resultString += morseToLatin.get(part);
-                        counter += 1;   
+                        counter += 1;
                     }
                     if (part === "") {
                         resultString += "\n";
@@ -91,19 +90,8 @@ input.addEventListener("input", function translate() {
             }
             res.value = resultString;
         } else {
-            displayError(); 
+            showError();
         }
-
-
-
-        // if (checkCharacters(morseToLatin)) {
-        //     hideError();
-        //     concatStr(morseToLatin);
-        //     res.value = resultString;
-        // } else {
-        //     displayError(); 
-        // }
-
     }
 
     if (input.value != "") {
@@ -121,9 +109,8 @@ exchangeBtn.addEventListener("click", function exchangeMode() {
     } else if (mode === 2 || mode === 3) {
         setMode(1);
     }
-    let exInput = input.value;
-    input.value = res.value;
-    res.value = exInput;
+    [input.value, res.value] = [res.value, input.value];
+    errorList = [];
 });
 
 morseBtn.addEventListener("click", function toggleMode() {
@@ -137,15 +124,19 @@ morseBtn.addEventListener("click", function toggleMode() {
 cross.addEventListener("click", function clearInput() {
     input.value = "";
     res.value = "";
+    errorList = [];
+    showError();
 });
 
 copy.addEventListener("click", function copyRes() {
     res.select();
     document.execCommand('copy');
     res.setSelectionRange(0, 0);
-    res.blur(); 
+    res.blur();
     copiedText.style.display = "block";
-    setTimeout(function(){ copiedText.style.display = "none" }, 5000);
+    setTimeout(function () {
+        copiedText.style.display = "none"
+    }, 5000);
 });
 
 
@@ -194,54 +185,48 @@ function splitStr(spliter) {
 /**
  * Checks if each characters of inputVal array is includes into the map of the mode activated
  * Returns true if there is no unknown characters
- * Returns false if there is at least one unknown characters and calls displayError function
+ * Returns false if there is at least one unknown characters and calls showError function
  * @param {*} usedMap Map which need to used
  */
 function checkCharacters(usedMap, str) {
     let i = 0;
     for (character of str) {
         if (usedMap.get(character) === undefined) {
-            if (problematicChar.includes(character) === false && character !== "") {
-                problematicChar.push(character);
-            } else {
+            if (errorList.includes(character) === false && character !== "") {
+                errorList.push(character);
+            } else if (character == "") {
                 i = i + 1;
             }
         } else {
             i = i + 1;
         }
     }
-    for (char of problematicChar) {
+    for (char of errorList) {
         if (str.includes(char) === false) {
-            problematicChar.splice(char, 1);
+            errorList.splice(char, 1);
         }
     }
-
 
     if (i == str.length) {
         return true;
     } else {
-        displayError();
         return false;
     }
 };
 
-function hideError()  {
-    errorContainer.style.background = "";
-    error.style.opacity = "0";
-}
+function showError() {
+    errorDisplayed = errorList.length === 0 ? errorDisplayed = false : errorDisplayed = true;
 
-/**
- * Diplays characters not supported in the input textarea
- */
-function displayError() {
-    console.error(problematicChar); 
-    if (inputVal.includes(problematicChar[length])) {
+    if (errorDisplayed) {
         errorContainer.setAttribute("aria-hidden", "false");
         errorContainer.style.background = "#F97D71";
         error.style.opacity = "1";
-        error.textContent = "Unknown character, please remove : " + problematicChar[length];
+        error.textContent = "Unknown.s character.s, please remove every : " + errorList[length];
+    } else {
+        errorContainer.style.background = "";
+        error.style.opacity = "0"
     }
-};
+}
 
 /**
  * Depending on the mode, concats elements of inputVal into a final string named resultString
@@ -288,14 +273,14 @@ function setMode(modeValue) {
             morseBtnHead.style.left = "5px";
             mode = 2;
             break;
-        case 3: 
+        case 3:
             text1.textContent = "Morse";
             text2.textContent = "Latin";
             morseBtn.style.display = "flex";
             morseBtn.style.background = "#5CD44C";
             morseBtnHead.style.left = "32px";
             mode = 3;
-            break;  
+            break;
         default:
             console.error("Mode inconnu");
     }
