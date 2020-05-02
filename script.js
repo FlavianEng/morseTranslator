@@ -63,7 +63,6 @@ input.addEventListener("input", function translate() {
         var inputStr = "";
         getInput();
         inputStr = inputVal.split(/\s/gm);
-        // console.log(inputStr);
         if (checkCharacters(morseToLatin, inputStr)) {
             showError();
             splitStr('\n');
@@ -142,8 +141,8 @@ copy.addEventListener("click", function copyRes() {
 
 // Functions
 /**
- * Converts a list to map
- * @param {*} list List which will become a map
+ * Converts a list given in parameter to map
+ * @param {Number} list List which will become a map
  */
 function buildMap(mode) {
     let newMap = new Map();
@@ -160,7 +159,10 @@ function buildMap(mode) {
             }
             break;
         default:
-            console.log("mode inconnu");
+            errorContainer.setAttribute("aria-hidden", "false");
+            errorContainer.style.background = "#F97D71";
+            error.style.opacity = "1";
+            error.textContent = "Something wrong happened, thanks to reload this page.";
             return false;
     }
     return newMap;
@@ -168,7 +170,7 @@ function buildMap(mode) {
 
 /**
  * Gets textArea value 
- * Sets textArea value in a global variable named inputVal
+ * Sets textArea value in the global string named inputVal
  */
 function getInput() {
     inputVal = input.value;
@@ -176,7 +178,7 @@ function getInput() {
 
 /**
  * Splits inputVal string into an array of characters
- * @param {*} spliter Character which split the string named inputVal
+ * @param {String} spliter Character or Regex which split the global string named inputVal
  */
 function splitStr(spliter) {
     inputVal = inputVal.split(spliter);
@@ -186,7 +188,8 @@ function splitStr(spliter) {
  * Checks if each characters of inputVal array is includes into the map of the mode activated
  * Returns true if there is no unknown characters
  * Returns false if there is at least one unknown characters and calls showError function
- * @param {*} usedMap Map which need to used
+ * @param {Map} usedMap Map which need to used
+ * @param {String} str String which is used
  */
 function checkCharacters(usedMap, str) {
     let i = 0;
@@ -214,6 +217,9 @@ function checkCharacters(usedMap, str) {
     }
 };
 
+/**
+ * Shows and hides errors
+ */
 function showError() {
     errorDisplayed = errorList.length === 0 ? errorDisplayed = false : errorDisplayed = true;
 
@@ -231,7 +237,7 @@ function showError() {
 /**
  * Depending on the mode, concats elements of inputVal into a final string named resultString
  * If character is "\n", don't add space after
- * @param {*} usedMap Map which need to use
+ * @param {Map} usedMap Map which need to use
  */
 function concatStr(usedMap) {
     resultString = "";
@@ -255,7 +261,7 @@ function concatStr(usedMap) {
 /**
  * Displays the right contents of textarea headers
  * Sets the new mode in the global variable named mode
- * @param {*} modeValue Value of the mode choose
+ * @param {Number} modeValue Value of the mode choose
  */
 function setMode(modeValue) {
     switch (modeValue) {
@@ -282,6 +288,9 @@ function setMode(modeValue) {
             mode = 3;
             break;
         default:
-            console.error("Mode inconnu");
+            errorContainer.setAttribute("aria-hidden", "false");
+            errorContainer.style.background = "#F97D71";
+            error.style.opacity = "1";
+            error.textContent = "Something wrong happened, thanks to reload this page.";
     }
 };
