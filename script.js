@@ -41,7 +41,7 @@ var errorDisplayed = false;
 // mode 1 =  latin to morse code
 // mode 2 = morse code to latin
 // mode 3 = morse code to latin with simulation on
-var mode = 3;
+var mode = 1;
 var pressStart, pressEnd, releaseStart, releaseEnd, pressDuration, releaseDuration;
 var spaceBarDown = false;
 
@@ -193,7 +193,7 @@ document.addEventListener("keyup", function simulationModeUp(e) {
 // Functions
 /**
  * Converts a list given in parameter to map
- * @param {Number} list List which will become a map
+ * @param {number} list List which will become a map
  */
 function buildMap(mode) {
     let newMap = new Map();
@@ -205,8 +205,6 @@ function buildMap(mode) {
             }
             break;
         case 2:
-        // SUPPRIMER A TERME
-        case 3:
             for (element of morseAlphabet) {
                 newMap.set(element[1], element[0]);
             }
@@ -224,7 +222,7 @@ function buildMap(mode) {
 /**
  * Displays the right contents of textarea headers
  * Sets the new mode in the global variable named mode
- * @param {Number} modeValue Value of the mode choose
+ * @param {number} modeValue Value of the mode choose
  */
 function setMode(modeValue) {
     switch (modeValue) {
@@ -269,7 +267,7 @@ function getInput() {
 
 /**
  * Splits inputVal string into an array of characters
- * @param {String} spliter Character or Regex which split the global string named inputVal
+ * @param {string} spliter Character or Regex which split the global string named inputVal
  */
 function splitStr(spliter) {
     inputVal = inputVal.split(spliter);
@@ -279,8 +277,8 @@ function splitStr(spliter) {
  * Checks if each characters of inputVal array is includes into the map of the mode activated
  * Returns true if there is no unknown characters
  * Returns false if there is at least one unknown characters and calls showError function
- * @param {Map} usedMap Map which need to used
- * @param {String} str String which is used
+ * @param {Object - map} usedMap Map which need to used
+ * @param {string} str String which is used
  */
 function checkCharacters(usedMap, str) {
     let i = 0;
@@ -328,7 +326,7 @@ function showError() {
 /**
  * Depending on the mode, concats elements of inputVal into a final string named resultString
  * If character is "\n", don't add space after
- * @param {Map} usedMap Map which need to use
+ * @param {Object - map} usedMap Map which need to use
  */
 function concatStr(usedMap) {
     resultString = "";
@@ -352,12 +350,11 @@ function concatStr(usedMap) {
 };
 
 /**
- * 
- * @param {*} duration 
- * @param {*} bool If true write ti and ta else write spaces
+ * Writes the character that correponds with duration and bool
+ * @param {number} duration Difference between two dates
+ * @param {boolean} bool If true write dit and dat else write spaces
  */
 function inputWriting(duration, bool) {
-
     if (bool) {
         if (duration > 0 && duration <= 800) {
             input.value += ".";
@@ -377,6 +374,9 @@ function inputWriting(duration, bool) {
     }
 }
 
+/**
+ * Translation process for mode 3
+ */
 function translateSimulationMode() {
     getInput();
     splitStr(' ');
@@ -397,6 +397,10 @@ function translateSimulationMode() {
     }
 }
 
+/**
+ * Clears text areas
+ * Emptys errorList & actualise
+ */
 function clearOutputs() {
     input.value = "";
     res.value = "";
