@@ -41,7 +41,9 @@ var errorDisplayed = false;
 // mode 1 =  latin to morse code
 // mode 2 = morse code to latin
 // mode 3 = morse code to latin with simulation on
-var mode = 1;
+var mode = 3;
+var pressStart, pressEnd, releaseStart, releaseEnd, pressDuration, releaseDuration;
+var spaceBarDown = false;
 
 // Main
 var latinToMorse = buildMap(1);
@@ -92,7 +94,7 @@ input.addEventListener("input", function translate() {
             showError();
         }
     } else if (mode === 3) {
-
+        translateSimulationMode();
     } else {
         showError()
     }
@@ -142,6 +144,51 @@ copy.addEventListener("click", function copyRes() {
     }, 5000);
 });
 
+document.addEventListener("keydown", function simulationModeDown(e) {
+    if (mode === 3) {
+        if (e.keyCode !== 32 && e.keyCode !== 8 && e.keyCode !== 83) {
+            e.preventDefault();
+        }
+        if (e.keyCode === 32) {
+            e.preventDefault();
+            if (spaceBarDown) return;
+            spaceBarDown = true;
+
+            // Press block
+            pressStart = new Date();
+
+            // Release block
+            releaseEnd = new Date();
+            releaseDuration = releaseEnd - releaseStart;
+            inputWriting(releaseDuration, false);
+            translateSimulationMode();
+        }
+        if (e.keyCode === 83) {
+            e.preventDefault();
+            position = e.target.selectionStart;
+            input.value = [input.value.slice(0, position), " ", input.value.slice(position)].join('');
+        }
+    }
+});
+
+document.addEventListener("keyup", function simulationModeUp(e) {
+    if (mode === 3) {
+        e.preventDefault();
+        if (e.keyCode === 32) {
+            spaceBarDown = false;
+
+            // Release block
+            releaseStart = new Date();
+
+            // Press block
+            pressEnd = new Date();
+            pressDuration = pressEnd - pressStart;
+            inputWriting(pressDuration, true);
+            translateSimulationMode();
+        }
+    }
+});
+
 
 // Functions
 /**
@@ -158,6 +205,8 @@ function buildMap(mode) {
             }
             break;
         case 2:
+        // SUPPRIMER A TERME
+        case 3:
             for (element of morseAlphabet) {
                 newMap.set(element[1], element[0]);
             }
@@ -171,6 +220,44 @@ function buildMap(mode) {
     }
     return newMap;
 }
+
+/**
+ * Displays the right contents of textarea headers
+ * Sets the new mode in the global variable named mode
+ * @param {Number} modeValue Value of the mode choose
+ */
+function setMode(modeValue) {
+    switch (modeValue) {
+        case 1:
+            text1.textContent = "Latin";
+            text2.textContent = "Morse";
+            morseBtn.style.display = "none";
+            mode = 1;
+            break;
+        case 2:
+            text1.textContent = "Morse";
+            text2.textContent = "Latin";
+            morseBtn.style.display = "flex";
+            morseBtn.style.background = "#dbdbdb";
+            morseBtnHead.style.left = "5px";
+            mode = 2;
+            break;
+        case 3:
+            text1.textContent = "Morse";
+            text2.textContent = "Latin";
+            morseBtn.style.display = "flex";
+            morseBtn.style.background = "#5CD44C";
+            morseBtnHead.style.left = "32px";
+            clearOutputs();
+            mode = 3;
+            break;
+        default:
+            errorContainer.setAttribute("aria-hidden", "false");
+            errorContainer.style.background = "#F97D71";
+            error.style.opacity = "1";
+            error.textContent = "Something wrong happened, thanks to reload this page.";
+    }
+};
 
 /**
  * Gets textArea value 
@@ -252,8 +339,10 @@ function concatStr(usedMap) {
             } else {
                 resultString += usedMap.get(character) + " ";
             }
-        } else if (mode === 2) {
-            resultString += usedMap.get(character);
+        } else if (mode === 3) {
+            if (usedMap.get(character) !== undefined) {
+                resultString += usedMap.get(character);
+            }
         }
     }
 
@@ -263,38 +352,54 @@ function concatStr(usedMap) {
 };
 
 /**
- * Displays the right contents of textarea headers
- * Sets the new mode in the global variable named mode
- * @param {Number} modeValue Value of the mode choose
+ * 
+ * @param {*} duration 
+ * @param {*} bool If true write ti and ta else write spaces
  */
-function setMode(modeValue) {
-    switch (modeValue) {
-        case 1:
-            text1.textContent = "Latin";
-            text2.textContent = "Morse";
-            morseBtn.style.display = "none";
-            mode = 1;
-            break;
-        case 2:
-            text1.textContent = "Morse";
-            text2.textContent = "Latin";
-            morseBtn.style.display = "flex";
-            morseBtn.style.background = "#dbdbdb";
-            morseBtnHead.style.left = "5px";
-            mode = 2;
-            break;
-        case 3:
-            text1.textContent = "Morse";
-            text2.textContent = "Latin";
-            morseBtn.style.display = "flex";
-            morseBtn.style.background = "#5CD44C";
-            morseBtnHead.style.left = "32px";
-            mode = 3;
-            break;
-        default:
-            errorContainer.setAttribute("aria-hidden", "false");
-            errorContainer.style.background = "#F97D71";
-            error.style.opacity = "1";
-            error.textContent = "Something wrong happened, thanks to reload this page.";
+function inputWriting(duration, bool) {
+
+    if (bool) {
+        if (duration > 0 && duration <= 800) {
+            input.value += ".";
+        } else if (duration >= 1300) {
+            input.value += "-";
+        }
+    } else {
+        if (input.value !== "" && input.value !== " ") {
+            if (duration > 1000 && duration <= 2500) {
+                input.value += " ";
+            } else if (duration > 4000) {
+                if (input.value !== "" || input.value !== " ") {
+                    input.value += " / ";
+                }
+            }
+        }
     }
-};
+}
+
+function translateSimulationMode() {
+    getInput();
+    splitStr(' ');
+    if (checkCharacters(morseToLatin, inputVal)) {
+        showError();
+        concatStr(morseToLatin);
+        res.value = resultString;
+    } else {
+        showError();
+    }
+
+    if (input.value != "") {
+        cross.style.display = "inline-block";
+        copy.style.display = "inline-block";
+    } else {
+        cross.style.display = "none";
+        copy.style.display = "none";
+    }
+}
+
+function clearOutputs() {
+    input.value = "";
+    res.value = "";
+    errorList = [];
+    showError();
+}
