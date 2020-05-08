@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=0.6, shrink-to-fit=no">
   <title>Morse translator</title>
   <link rel="stylesheet" href="/css/style.min.css">
   <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
@@ -21,8 +22,8 @@
       </div>
       <div class="translator_console">
         <div class="translator_console_input">
-          <textarea id="input"></textarea>
           <i id="cross" class="fas fa-times"></i>
+          <textarea id="input"></textarea>
           <div id="errorContainer" class="translator_console_error">
             <p id="error"></p>
           </div>
@@ -51,9 +52,46 @@
       </div>
     </div>
   </div>
+  <div class="helper">
+    <div class="helper_title">
+      <p>How to use ?</p>
+    </div>
+    <div class="helper_part">
+      <div class="helper_part_guides">
+        <div class="helper_part_guides_commands">
+          <p>
+            <i class="key">Space</i> It's like your homemade Sideswiper
+          </p>
+          <p>
+            <i class="key">Backspace</i> I'll don't even explain you what's for
+          </p>
+          <p>
+            <i class="key">S</i> Allow you to insert a space by hand
+          </p>
+        </div>
+        <div class="helper_part_guides_description">
+          <p class="helper_part_guides_description_subtitle">Here some explanation</p>
+          <p>A "dit" is translate with a "."
+            <br>A "dat" is translate with a "-"</p>
+          <p>Space between letters of a word have for length a "dat" (3 "dit"). <br> He's noted with a space.</p>
+          <p>EXEMPLE -- --- .-. ... . / -.-. --- -.. . (morse code)</p>
+          <p>dit = 500ms
+            <br>dat = 2000ms</p>
+          <p>2000ms between each letters
+            <br>5000ms between each words</p>
+          <a href="https://en.wikipedia.org/wiki/Morse_code" target="_blank">Learn more</a>
+        </div>
+      </div>
+      <div class="helper_part_alphabet">
+        <p>International morse code</p>
+        <img src="./assets/international_morse_code.png" alt="international morse code">
+      </div>
+    </div>
+  </div>
 </body>
 <!-- <script src="./dist/polyfill.bundle.js"></script>
 <script src="./dist/app.bundle.js"></script> -->
 <script src="script.js"></script>
+<script src="grumpyItems.js"></script>
 
 </html>

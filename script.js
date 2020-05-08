@@ -32,6 +32,7 @@ const copy = document.getElementById("copy");
 const copiedText = document.getElementById("copied");
 const morseBtn = document.getElementById("morseBtn");
 const morseBtnHead = document.getElementById("morseBtnHead");
+const mode3Helper = document.getElementsByClassName("helper")[0];
 
 // Globals var
 var inputVal = "";
@@ -100,8 +101,8 @@ input.addEventListener("input", function translate() {
     }
 
     if (input.value != "") {
-        cross.style.display = "inline-block";
-        copy.style.display = "inline-block";
+        cross.style.display = "flex";
+        copy.style.display = "flex";
     } else {
         cross.style.display = "none";
         copy.style.display = "none";
@@ -138,7 +139,7 @@ copy.addEventListener("click", function copyRes() {
     document.execCommand('copy');
     res.setSelectionRange(0, 0);
     res.blur();
-    copiedText.style.display = "block";
+    copiedText.style.display = "flex";
     setTimeout(function () {
         copiedText.style.display = "none"
     }, 5000);
@@ -230,6 +231,7 @@ function setMode(modeValue) {
             text1.textContent = "Latin";
             text2.textContent = "Morse";
             morseBtn.style.display = "none";
+            mode3Helper.style.display = "none";
             mode = 1;
             break;
         case 2:
@@ -238,6 +240,7 @@ function setMode(modeValue) {
             morseBtn.style.display = "flex";
             morseBtn.style.background = "#dbdbdb";
             morseBtnHead.style.left = "5px";
+            mode3Helper.style.display = "none";
             mode = 2;
             break;
         case 3:
@@ -247,6 +250,7 @@ function setMode(modeValue) {
             morseBtn.style.background = "#5CD44C";
             morseBtnHead.style.left = "32px";
             clearOutputs();
+            mode3Helper.style.display = "flex";
             mode = 3;
             break;
         default:
@@ -389,8 +393,8 @@ function translateSimulationMode() {
     }
 
     if (input.value != "") {
-        cross.style.display = "inline-block";
-        copy.style.display = "inline-block";
+        cross.style.display = "flex";
+        copy.style.display = "flex";
     } else {
         cross.style.display = "none";
         copy.style.display = "none";

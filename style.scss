@@ -3,6 +3,7 @@
 $font : 'VT323', monospace;
 $fontSizeTitle : 2.5em;
 $fontSizeSubTitle: 2em;
+$fontSizeSubSubTitle: 1.5em;
 $fontSizeNormal : 1.2em;
 $breakpoint-tablet: 1105px;
 $i_color: #757575;
@@ -17,7 +18,6 @@ $i_color_hover: #047CFC;
 @media (max-width: $breakpoint-tablet) {
     .translator {
         @include flexBase(column, space-evenly);
-
         &_part {
             &_2 {
                 align-self: center;
@@ -25,7 +25,9 @@ $i_color_hover: #047CFC;
             }
         }
     }
-
+    #morseBtn {
+        display: none !important;
+    }
 }
 
 @media (min-width: $breakpoint-tablet + 1) {
@@ -143,11 +145,12 @@ $i_color_hover: #047CFC;
 
             & > i {
                 position: relative;
-                left: 525px;
-                bottom: 280px;
+                transform: translate(-9px,16px);
+                align-self: flex-end;
                 font-size: 0.8em;
                 display: none;
                 line-height: 0;
+                z-index: 1;
             }
         }
 
@@ -157,24 +160,100 @@ $i_color_hover: #047CFC;
                 display: none;
                 position: relative;
                 line-height: 0;
-                left: 520px;
-                bottom: 24px;
+                transform: translate(-10px, -15px);
+                align-self: flex-end;
                 font-size: 0.8em;
             }
 
             & #copied {
-                display: none   ;
+                display: none;
+                position: relative;
+                transform: translate(0px, 15px);
+                align-self: flex-end;
                 color: $i_color_hover;
                 font-style: normal;
                 font-size: $fontSizeNormal;
-                left: 480px;
-                top: 13px;
                 cursor: default;
             }
 
         }
     }
 }
+
+.helper {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    font-size: $fontSizeNormal;
+    margin-bottom: 50px;
+    &_title {
+        @include flexBase(row, center);
+        & p {
+            font-size: $fontSizeSubTitle;  
+        }
+    }
+    &_part {
+        @include flexBase(row, center);
+        flex-wrap: wrap;
+        &_guides {
+            @include flexBase(column,center);
+            &_commands {
+                & p {
+                    margin: 30px;
+                    & i {
+                        font-style: normal;
+                        border: solid black 1px;
+                        border-radius: 0.2em;
+                        box-shadow: 0px 0px 3px #7C7C7C;
+                        padding: 10px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            &_description {
+                &_subtitle {
+                    display: flex;
+                    justify-content: center;
+                    font-size: $fontSizeSubSubTitle;
+                }
+                & p {
+                    line-height: 1em;
+                }
+                & a {
+                    position: absolute;
+                    color: blue;
+                    font-style: normal;
+                    border: solid black 1px;
+                    border-radius: 0.2em;
+                    box-shadow: 0px 0px 3px #7C7C7C;
+                    padding: 10px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    transform: translateY(0px);
+                    transition: all 0.1s;
+                    &:hover {
+                        transform: translateY(2px);
+                    }
+                    &:active {
+                        color: blue;
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        &_alphabet {
+            @include flexBase(column,center);
+            align-items: center;
+            & p {
+                font-size: $fontSizeSubSubTitle;
+            }
+            & img {
+                width: 20em;
+            }
+        }
+    }
+}
+
 
 #res {
     cursor: default;
