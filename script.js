@@ -132,6 +132,8 @@ cross.addEventListener("click", function clearInput() {
     res.value = "";
     errorList = [];
     showError();
+    cross.style.display = "none";
+    copy.style.display = "none";
 });
 
 copy.addEventListener("click", function copyRes() {
