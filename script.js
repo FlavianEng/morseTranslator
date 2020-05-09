@@ -56,13 +56,8 @@ input.addEventListener("input", function translate() {
         getInput();
         inputVal = inputVal.toLowerCase();
         splitStr('');
-        if (checkCharacters(latinToMorse, inputVal)) {
-            showError();
-            concatStr(latinToMorse);
-            res.value = resultString;
-        } else {
-            showError();
-        }
+        Translation(latinToMorse, inputVal);
+        returnResultStr();
     } else if (mode === 2) {
         var inputStr = "";
         getInput();
@@ -315,6 +310,27 @@ function checkCharacters(usedMap, str) {
     }
 };
 
+function Translation(usedMap, str) {
+    resultString = "";
+    for (character of str) {
+        if (usedMap.get(character) === undefined) {
+            if (character !== "") {
+                if (errorList.includes(character) === false) {
+                    errorList.push(character);
+                }
+            }
+        } else {
+            buildResultStr(usedMap, character);
+        }
+    }
+    for (char of errorList) {
+        if (str.includes(char) === false) {
+            errorList.splice(char, 1);
+        }
+    }
+    showError();
+}
+
 /**
  * Shows and hides errors
  */
@@ -357,6 +373,32 @@ function concatStr(usedMap) {
         resultString = resultString.trim();
     }
 };
+
+function buildResultStr(usedMap, character) {
+    switch (mode) {
+        case 1:
+            if (character === "\n") {
+                resultString += usedMap.get(character);
+            } else {
+                resultString += usedMap.get(character) + " ";
+            }
+            break;
+        case 2:
+            break;
+        case 3:
+            if (usedMap.get(character) !== undefined) {
+                resultString += usedMap.get(character);
+            }
+            break;
+        default:
+            console.error("Y'a une errreur");
+    }
+}
+
+function returnResultStr() {
+    resultString = resultString.trim();
+    res.value = resultString;
+}
 
 /**
  * Writes the character that correponds with duration and bool
