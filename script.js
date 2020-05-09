@@ -53,56 +53,27 @@ var morseToLatin = buildMap(2);
 
 input.addEventListener("input", function translate() {
     if (mode === 1) {
-        getInput();
-        inputVal = inputVal.toLowerCase();
-        splitStr('');
+        init('');
         Translation(latinToMorse, inputVal);
-        returnResultStr();
+        resultString = resultString.trim();
+        res.value = resultString;
     } else if (mode === 2) {
-        var inputStr = "";
-        getInput();
-        inputStr = inputVal.split(/\s/gm);
-        if (checkCharacters(morseToLatin, inputStr)) {
-            showError();
-            splitStr('\n');
-            var lines = [];
-            for (i of inputVal) {
-                inputVal[i] = i.split(" ");
-                lines.push(inputVal[i]);
+        init('\n');
+        for (line of inputVal) {
+            let splittedLine = line.split(' ');
+            if (resultString !== "") {
+                resultString += "\n";
             }
-            resultString = "";
-            for (line of lines) {
-                let counter = 0;
-                for (part of line) {
-                    if (morseToLatin.get(part) !== undefined) {
-                        resultString += morseToLatin.get(part);
-                        counter += 1;
-                    }
-                    if (part === "") {
-                        resultString += "\n";
-                    }
-                    if (counter === line.length) {
-                        resultString += "\n";
-                    }
-                }
-            }
-            res.value = resultString;
-        } else {
-            showError();
+            Translation(morseToLatin, splittedLine);
         }
-    } else if (mode === 3) {
-        translateSimulationMode();
+        res.value = resultString;
+    }
+    else if (mode === 3) {
+        translateMode3();
     } else {
         showError()
     }
-
-    if (input.value != "") {
-        cross.style.display = "flex";
-        copy.style.display = "flex";
-    } else {
-        cross.style.display = "none";
-        copy.style.display = "none";
-    }
+    showCrossAndCopy();
 });
 
 exchangeBtn.addEventListener("click", function exchangeMode() {
@@ -162,7 +133,7 @@ document.addEventListener("keydown", function simulationModeDown(e) {
             releaseEnd = new Date();
             releaseDuration = releaseEnd - releaseStart;
             inputWriting(releaseDuration, false);
-            translateSimulationMode();
+            translateMode3();
         }
         if (e.keyCode === 83) {
             e.preventDefault();
@@ -185,7 +156,7 @@ document.addEventListener("keyup", function simulationModeUp(e) {
             pressEnd = new Date();
             pressDuration = pressEnd - pressStart;
             inputWriting(pressDuration, true);
-            translateSimulationMode();
+            translateMode3();
         }
     }
 });
@@ -198,7 +169,6 @@ document.addEventListener("keyup", function simulationModeUp(e) {
  */
 function buildMap(mode) {
     let newMap = new Map();
-    let i = 0;
     switch (mode) {
         case 1:
             for (element of morseAlphabet) {
@@ -265,53 +235,16 @@ function setMode(modeValue) {
  * Gets textArea value 
  * Sets textArea value in the global string named inputVal
  */
-function getInput() {
+function init(splitter) {
     inputVal = input.value;
-};
-
-/**
- * Splits inputVal string into an array of characters
- * @param {string} spliter Character or Regex which split the global string named inputVal
- */
-function splitStr(spliter) {
-    inputVal = inputVal.split(spliter);
-};
-
-/**
- * Checks if each characters of inputVal array is includes into the map of the mode activated
- * Returns true if there is no unknown characters
- * Returns false if there is at least one unknown characters and calls showError function
- * @param {Object - map} usedMap Map which need to used
- * @param {string} str String which is used
- */
-function checkCharacters(usedMap, str) {
-    let i = 0;
-    for (character of str) {
-        if (usedMap.get(character) === undefined) {
-            if (errorList.includes(character) === false && character !== "") {
-                errorList.push(character);
-            } else if (character == "") {
-                i = i + 1;
-            }
-        } else {
-            i = i + 1;
-        }
+    resultString = "";
+    if (mode === 1) {
+        inputVal = inputVal.toLowerCase();
     }
-    for (char of errorList) {
-        if (str.includes(char) === false) {
-            errorList.splice(char, 1);
-        }
-    }
-
-    if (i == str.length) {
-        return true;
-    } else {
-        return false;
-    }
+    inputVal = inputVal.split(splitter);
 };
 
 function Translation(usedMap, str) {
-    resultString = "";
     for (character of str) {
         if (usedMap.get(character) === undefined) {
             if (character !== "") {
@@ -324,7 +257,7 @@ function Translation(usedMap, str) {
         }
     }
     for (char of errorList) {
-        if (str.includes(char) === false) {
+        if (input.value.includes(char) === false) {
             errorList.splice(char, 1);
         }
     }
@@ -348,31 +281,6 @@ function showError() {
     }
 }
 
-/**
- * Depending on the mode, concats elements of inputVal into a final string named resultString
- * If character is "\n", don't add space after
- * @param {Object - map} usedMap Map which need to use
- */
-function concatStr(usedMap) {
-    resultString = "";
-    for (character of inputVal) {
-        if (mode === 1) {
-            if (character === "\n") {
-                resultString += usedMap.get(character);
-            } else {
-                resultString += usedMap.get(character) + " ";
-            }
-        } else if (mode === 3) {
-            if (usedMap.get(character) !== undefined) {
-                resultString += usedMap.get(character);
-            }
-        }
-    }
-
-    if (mode === 1) {
-        resultString = resultString.trim();
-    }
-};
 
 function buildResultStr(usedMap, character) {
     switch (mode) {
@@ -384,20 +292,17 @@ function buildResultStr(usedMap, character) {
             }
             break;
         case 2:
-            break;
         case 3:
-            if (usedMap.get(character) !== undefined) {
-                resultString += usedMap.get(character);
-            }
+            resultString += usedMap.get(character);
             break;
+        // case 3:
+        //     if (usedMap.get(character) !== undefined) {
+        //         resultString += usedMap.get(character);
+        //     }
+        //     break;
         default:
             console.error("Y'a une errreur");
     }
-}
-
-function returnResultStr() {
-    resultString = resultString.trim();
-    res.value = resultString;
 }
 
 /**
@@ -428,24 +333,11 @@ function inputWriting(duration, bool) {
 /**
  * Translation process for mode 3
  */
-function translateSimulationMode() {
-    getInput();
-    splitStr(' ');
-    if (checkCharacters(morseToLatin, inputVal)) {
-        showError();
-        concatStr(morseToLatin);
-        res.value = resultString;
-    } else {
-        showError();
-    }
-
-    if (input.value != "") {
-        cross.style.display = "flex";
-        copy.style.display = "flex";
-    } else {
-        cross.style.display = "none";
-        copy.style.display = "none";
-    }
+function translateMode3() {
+    init(' ');
+    Translation(morseToLatin, inputVal);
+    res.value = resultString;
+    showCrossAndCopy();
 }
 
 /**
@@ -457,4 +349,14 @@ function clearOutputs() {
     res.value = "";
     errorList = [];
     showError();
+}
+
+function showCrossAndCopy() {
+    if (input.value != "") {
+        cross.style.display = "flex";
+        copy.style.display = "flex";
+    } else {
+        cross.style.display = "none";
+        copy.style.display = "none";
+    }
 }

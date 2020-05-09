@@ -140,7 +140,6 @@ $i_color: #757575;
         color: $i_color;
         transition: color 200ms;
         cursor: pointer;
-        position: relative;
         line-height: 0;
         font-size: 0.8em;
         align-self: flex-end;
@@ -307,7 +306,8 @@ span {
 
 #errorContainer {
     color: #FFF;
-
+    border-radius: 0.2em;
+     
     &>p {
         padding: 10px;
         opacity: 0;
