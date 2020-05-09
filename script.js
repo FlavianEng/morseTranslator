@@ -29,7 +29,8 @@ const text2 = document.getElementById("text2");
 const exchangeBtn = document.getElementById("exchangeBtn");
 const cross = document.getElementById("cross");
 const copy = document.getElementById("copy");
-const copiedText = document.getElementById("copied");
+// const copiedText = document.getElementById("copied");
+const copiedText = document.querySelector('#copy > span:nth-child(1)');
 const morseBtn = document.getElementById("morseBtn");
 const morseBtnHead = document.getElementById("morseBtnHead");
 const mode3Helper = document.getElementsByClassName("helper")[0];
@@ -142,9 +143,11 @@ copy.addEventListener("click", function copyRes() {
     res.setSelectionRange(0, 0);
     res.blur();
     copiedText.style.display = "flex";
+    copiedText.textContent = "Copied";
     setTimeout(function () {
-        copiedText.style.display = "none"
-    }, 5000);
+        copiedText.style.removeProperty("display");
+        copiedText.textContent = "Copy content";
+    }, 2000);
 });
 
 document.addEventListener("keydown", function simulationModeDown(e) {

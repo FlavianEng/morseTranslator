@@ -7,7 +7,6 @@ $fontSizeSubSubTitle: 1.5em;
 $fontSizeNormal : 1.2em;
 $breakpoint-tablet: 1105px;
 $i_color: #757575;
-$i_color_hover: #047CFC;
 
 @mixin flexBase ($direction, $justify) {
     display: flex;
@@ -16,6 +15,9 @@ $i_color_hover: #047CFC;
 }
 
 @media (max-width: $breakpoint-tablet) {
+    .container > p {
+        display: flex;
+    }
     .translator {
         @include flexBase(column, space-evenly);
         &_part {
@@ -31,6 +33,9 @@ $i_color_hover: #047CFC;
 }
 
 @media (min-width: $breakpoint-tablet + 1) {
+    .container > p {
+        display: none;
+    }
     .translator {
         @include flexBase(row, space-evenly);
     }
@@ -42,6 +47,18 @@ $i_color_hover: #047CFC;
     font-family: $font;
     font-size: $fontSizeNormal;
     overflow-x: hidden;
+
+    & > p {
+        align-self: center;
+        width: auto;
+        text-align: center;
+        background: black;
+        color: white;
+        padding: 10px;
+        position: absolute;
+        top: 4.8em;
+        border-radius: 0.2em;
+    }
 }
 
 .title {
@@ -95,6 +112,19 @@ $i_color_hover: #047CFC;
                 box-shadow: 0px 0px 3px grey;
                 border-radius: 25px;
             }
+
+            &:hover + span {
+                display: flex;
+            }
+        }
+
+        & span {
+            font-size: 0.5em;
+            font-weight: 400;
+            top: 110px;
+            left: 368px;
+            z-index: 2;
+            border-radius: 0.2em;
         }
     }
 
@@ -106,12 +136,19 @@ $i_color_hover: #047CFC;
     }
 
     & i {
+        z-index: 1;
         color: $i_color;
         transition: color 200ms;
         cursor: pointer;
-
+        position: relative;
+        line-height: 0;
+        font-size: 0.8em;
+        align-self: flex-end;
         &:hover {
-            color: $i_color_hover;
+            color: black;
+        }
+        &:hover span {
+            display: flex;
         }
     }
 
@@ -144,13 +181,14 @@ $i_color_hover: #047CFC;
             @include flexBase(column, center);
 
             & > i {
-                position: relative;
-                transform: translate(-9px,16px);
-                align-self: flex-end;
-                font-size: 0.8em;
                 display: none;
-                line-height: 0;
-                z-index: 1;
+                transform: translate(-9px,16px);
+                cursor: pointer;
+                & span {
+                    border-radius: 0.2em 0.2em 0 0;
+                    top: -33px;
+                    right: -9px;
+                }
             }
         }
 
@@ -158,24 +196,13 @@ $i_color_hover: #047CFC;
             @include flexBase(column, center);
             & i {
                 display: none;
-                position: relative;
-                line-height: 0;
                 transform: translate(-10px, -15px);
-                align-self: flex-end;
-                font-size: 0.8em;
+                & span {
+                    border-radius: 0 0 0.2em 0.2em;
+                    top: 12px;
+                    right: -10px;
+                }
             }
-
-            & #copied {
-                display: none;
-                position: relative;
-                transform: translate(0px, 15px);
-                align-self: flex-end;
-                color: $i_color_hover;
-                font-style: normal;
-                font-size: $fontSizeNormal;
-                cursor: default;
-            }
-
         }
     }
 }
@@ -185,7 +212,7 @@ $i_color_hover: #047CFC;
     flex-direction: column;
     justify-content: center;
     font-size: $fontSizeNormal;
-    margin-bottom: 50px;
+    margin-bottom: 80px;
     &_title {
         @include flexBase(row, center);
         & p {
@@ -252,6 +279,25 @@ $i_color_hover: #047CFC;
             }
         }
     }
+}
+
+span {
+    display: none;
+    z-index: 1;
+    font-size: $fontSizeNormal;
+    font-weight: 900;
+    font-family: $font;
+    border-radius: 0.2em 0.2em 0 0;
+    padding: 10px;
+    position: absolute;
+    width: max-content;
+    color: white;
+    background: black;
+    text-align: center;
+}
+
+#morseBtn:hover > span {
+    display: flex;
 }
 
 

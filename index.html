@@ -11,6 +11,7 @@
 
 <body class="container">
   <h1 class="title">Morse translator</h1>
+  <p>We also have a telegraph key on desktop browser</p>
   <div class="translator">
     <!-- Part 1 -->
     <div class="translator_part">
@@ -19,10 +20,11 @@
         <div id="morseBtn" class="translator_header_btn">
           <div id="morseBtnHead" class="translator_header_btn_head"></div>
         </div>
+        <span>Activates telegraph key simulation mode</span>
       </div>
       <div class="translator_console">
         <div class="translator_console_input">
-          <i id="cross" class="fas fa-times"></i>
+          <i id="cross" class="fas fa-times"><span>Delete content</span></i>
           <textarea id="input"></textarea>
           <div id="errorContainer" class="translator_console_error">
             <p id="error"></p>
@@ -44,8 +46,7 @@
       <div class="translator_console">
         <div class="translator_console_res">
           <textarea id="res" readonly aria-readonly="true"></textarea>
-          <i id="copy" class="far fa-copy"></i>
-          <i id="copied">Copied</i>
+          <i id="copy" class="far fa-copy"><span>Copy content</span></i>
           <div class="translator_console_error">
           </div>
         </div>
@@ -60,7 +61,7 @@
       <div class="helper_part_guides">
         <div class="helper_part_guides_commands">
           <p>
-            <i class="key">Space</i> It's like your homemade Sideswiper
+            <i class="key">Space</i> It's like your homemade telegraph key
           </p>
           <p>
             <i class="key">Backspace</i> I'll don't even explain you what's for
@@ -89,9 +90,9 @@
     </div>
   </div>
 </body>
-<script src="./dist/polyfill.bundle.js"></script>
-<script src="./dist/app.bundle.js"></script>
-<!-- <script src="script.js"></script>
-<script src="grumpyItems.js"></script> -->
+<!-- <script src="./dist/polyfill.bundle.js"></script>
+<script src="./dist/app.bundle.js"></script> -->
+<script src="script.js"></script>
+<script src="grumpyItems.js"></script>
 
 </html>
