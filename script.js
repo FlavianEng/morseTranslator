@@ -49,6 +49,7 @@ var spaceBarDown = false;
 // Main
 var latinToMorse = buildMap(1);
 var morseToLatin = buildMap(2);
+showCrossAndCopy();
 
 input.addEventListener("input", function translate() {
     if (mode === 1) {
@@ -66,9 +67,6 @@ input.addEventListener("input", function translate() {
             Translation(morseToLatin, splittedLine);
         }
         res.value = resultString;
-    }
-    else if (mode === 3) {
-        translateMode3();
     } else {
         showError()
     }
@@ -91,6 +89,7 @@ morseBtn.addEventListener("click", function toggleMode() {
     } else if (mode === 3) {
         setMode(2);
     }
+
 });
 
 cross.addEventListener("click", function clearInput() {
@@ -117,11 +116,8 @@ copy.addEventListener("click", function copyRes() {
 
 document.addEventListener("keydown", function simulationModeDown(e) {
     if (mode === 3) {
-        if (e.keyCode !== 32 && e.keyCode !== 8 && e.keyCode !== 83) {
-            e.preventDefault();
-        }
+        e.preventDefault();
         if (e.keyCode === 32) {
-            e.preventDefault();
             if (spaceBarDown) return;
             spaceBarDown = true;
 
@@ -134,17 +130,12 @@ document.addEventListener("keydown", function simulationModeDown(e) {
             inputWriting(releaseDuration, false);
             translateMode3();
         }
-        if (e.keyCode === 83) {
-            e.preventDefault();
-            position = e.target.selectionStart;
-            input.value = [input.value.slice(0, position), " ", input.value.slice(position)].join('');
-        }
     }
 });
 
 document.addEventListener("keyup", function simulationModeUp(e) {
+    e.preventDefault();
     if (mode === 3) {
-        e.preventDefault();
         if (e.keyCode === 32) {
             spaceBarDown = false;
 
@@ -197,6 +188,8 @@ function setMode(modeValue) {
             text2.textContent = "Morse";
             morseBtn.style.display = "none";
             mode3Helper.style.display = "none";
+            input.removeAttribute("readonly");
+            input.style.removeProperty("cursor");
             mode = 1;
             break;
         case 2:
@@ -206,6 +199,8 @@ function setMode(modeValue) {
             morseBtn.style.background = "#dbdbdb";
             morseBtnHead.style.left = "5px";
             mode3Helper.style.display = "none";
+            input.removeAttribute("readonly");
+            input.style.removeProperty("cursor");
             mode = 2;
             break;
         case 3:
@@ -214,9 +209,11 @@ function setMode(modeValue) {
             morseBtn.style.display = "flex";
             morseBtn.style.background = "#5CD44C";
             morseBtnHead.style.left = "32px";
-            clearOutputs();
             mode3Helper.style.display = "flex";
+            input.setAttribute("readonly", "");
+            input.style.cursor = "default";
             mode = 3;
+            showCrossAndCopy();
             break;
         default:
             showError();
@@ -249,11 +246,6 @@ function Translation(usedMap, str) {
             buildResultStr(usedMap, character);
         }
     }
-    // for (char of errorList) {
-    //     if (input.value.includes(char) === false) {
-    //         errorList.splice(char, 1);
-    //     }
-    // }
     showError();
 }
 
@@ -312,14 +304,14 @@ function inputWriting(duration, bool) {
     if (bool) {
         if (duration > 0 && duration <= 800) {
             input.value += ".";
-        } else if (duration >= 1300) {
+        } else if (duration >= 1000) {
             input.value += "-";
         }
     } else {
         if (input.value !== "" && input.value !== " ") {
-            if (duration > 1000 && duration <= 2500) {
+            if (duration > 1000 && duration <= 3000) {
                 input.value += " ";
-            } else if (duration > 4000) {
+            } else if (duration > 3500) {
                 if (input.value !== "" || input.value !== " ") {
                     input.value += " / ";
                 }
