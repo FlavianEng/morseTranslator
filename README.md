@@ -16,3 +16,5 @@ This project a morse translator with several features :
     
 If you find any bugs or errors, let me know.  
 If you use this for any project, please quote me.
+
+*Licence GNU General Public License v3.0*
