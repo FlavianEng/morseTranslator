@@ -1,5 +1,8 @@
 {
-  "name": "3_morsetranslator",
+  "name": "@flavianeng/morsetranslator",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
@@ -7,8 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
-  "author": "",
+  "author": "Flavian Engevin",
   "license": "ISC",
+  "repository": {
+    "url": "git://github.com/FlavianEng/morseTranslator.git"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "webpack": "^4.43.0"
