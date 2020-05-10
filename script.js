@@ -89,13 +89,10 @@ morseBtn.addEventListener("click", function toggleMode() {
     } else if (mode === 3) {
         setMode(2);
     }
-
 });
 
-cross.addEventListener("click", function clearInput() {
-    input.value = "";
-    res.value = "";
-    errorList = [];
+cross.addEventListener("click", function cross() {
+    clearTextareas();
     showError();
     cross.style.display = "none";
     copy.style.display = "none";
@@ -267,7 +264,7 @@ function Translation(usedMap, str) {
  */
 function showError() {
     const errorCharacters = "Unknown.s character.s, please remove : ";
-    const errorMode = "Something wrong happened, thanks to reload this page.";
+    const errorMode = "Oh boy ! Something wrong happened, please reload this page.";
     let errorMessage = "", problematicChar = errorList[0];
     if (mode !== 1 && mode !== 2 && mode !== 3) {
         errorMessage = errorMode;
@@ -351,7 +348,7 @@ function translateMode3() {
  * Empties error list 
  * Actualises error displaying
  */
-function clearOutputs() {
+function clearTextareas() {
     input.value = "";
     res.value = "";
     errorList = [];
