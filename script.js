@@ -154,8 +154,9 @@ document.addEventListener("keyup", function simulationModeUp(e) {
 
 // Functions
 /**
- * Converts a list given in parameter to map
- * @param {number} list List which will become a map
+ * Converts a list to a map depending the mode given in parameter
+ * @param {number} mode mode given (Have to be equal to 1 or 2)
+ * If mode is unknown, displays an error
  */
 function buildMap(mode) {
     let newMap = new Map();
@@ -177,7 +178,7 @@ function buildMap(mode) {
 }
 
 /**
- * Displays the right contents of textarea headers
+ * Displays the right UI 
  * Sets the new mode in the global variable named mode
  * @param {number} modeValue Value of the mode choose
  */
@@ -221,8 +222,10 @@ function setMode(modeValue) {
 };
 
 /**
- * Gets textArea value 
- * Sets textArea value in the global string named inputVal
+ * Gets input textarea value and sets in the global variable named inputVal
+ * Resets the result string and the error list
+ * Splits the global variable named inputVal with the splitter given in parameter
+ * @param {string} splitter Character.s used to split the string
  */
 function init(splitter) {
     inputVal = input.value;
@@ -234,6 +237,13 @@ function init(splitter) {
     inputVal = inputVal.split(splitter);
 };
 
+/**
+ * Checks each characters exist in the map given in parameter 
+ * If a characters is unknown, pushes him into error list
+ * Actualises error displaying
+ * @param {Object map} usedMap Map used to translate
+ * @param {string} str String who'll be translate
+ */
 function Translation(usedMap, str) {
     for (character of str) {
         if (usedMap.get(character) === undefined) {
@@ -252,6 +262,8 @@ function Translation(usedMap, str) {
 
 /**
  * Shows and hides errors
+ * Defines the right content to displays
+ * If a wrong "character" is too long, reduces him to 60 characters
  */
 function showError() {
     const errorCharacters = "Unknown.s character.s, please remove : ";
@@ -276,7 +288,11 @@ function showError() {
     }
 }
 
-
+/**
+ * Depending the mode, builds the result string with map and character given in parameters
+ * @param {*} usedMap Map used to translate
+ * @param {*} character Character who'll be translate
+ */
 function buildResultStr(usedMap, character) {
     switch (mode) {
         case 1:
@@ -296,9 +312,9 @@ function buildResultStr(usedMap, character) {
 }
 
 /**
- * Writes the character that correponds with duration and bool
+ * Writes the character that correponds with duration and boolean given in parameters
  * @param {number} duration Difference between two dates
- * @param {boolean} bool If true write dit and dat else write spaces
+ * @param {boolean} bool If true write "dit" and "dat" else write spaces
  */
 function inputWriting(duration, bool) {
     if (bool) {
@@ -332,7 +348,8 @@ function translateMode3() {
 
 /**
  * Clears text areas
- * Emptys errorList & actualise
+ * Empties error list 
+ * Actualises error displaying
  */
 function clearOutputs() {
     input.value = "";
@@ -341,6 +358,9 @@ function clearOutputs() {
     showError();
 }
 
+/**
+ * Shows or hides cross and copy buttons
+ */
 function showCrossAndCopy() {
     if (input.value != "") {
         cross.style.display = "flex";
