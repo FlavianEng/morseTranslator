@@ -165,15 +165,21 @@ $i_color: #757575;
         }
 
         &_error {
-            display: flex;
-            position: relative;
+            background-color: #F97D71;
+            display: none;
+            position: absolute;
+            transform: translate(22px, 105px);
             z-index: 1;
-            bottom: 73px;
-            left: 22px;
             width: 500px;
             height: 60px;
             justify-content: center;
             align-items: center;
+            border-radius: 0.2em;
+     
+            & > p {
+                color: #FFF;
+                padding: 10px;
+            }
         }
 
         &_input {
@@ -299,17 +305,7 @@ span {
     display: flex;
 }
 
-
 #res {
     cursor: default;
 }
 
-#errorContainer {
-    color: #FFF;
-    border-radius: 0.2em;
-     
-    &>p {
-        padding: 10px;
-        opacity: 0;
-    }
-}

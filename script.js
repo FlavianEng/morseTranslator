@@ -29,7 +29,6 @@ const text2 = document.getElementById("text2");
 const exchangeBtn = document.getElementById("exchangeBtn");
 const cross = document.getElementById("cross");
 const copy = document.getElementById("copy");
-// const copiedText = document.getElementById("copied");
 const copiedText = document.querySelector('#copy > span:nth-child(1)');
 const morseBtn = document.getElementById("morseBtn");
 const morseBtnHead = document.getElementById("morseBtnHead");
@@ -181,11 +180,7 @@ function buildMap(mode) {
             }
             break;
         default:
-            errorContainer.setAttribute("aria-hidden", "false");
-            errorContainer.style.background = "#F97D71";
-            error.style.opacity = "1";
-            error.textContent = "Something wrong happened, thanks to reload this page.";
-            return false;
+            showError();
     }
     return newMap;
 }
@@ -224,10 +219,7 @@ function setMode(modeValue) {
             mode = 3;
             break;
         default:
-            errorContainer.setAttribute("aria-hidden", "false");
-            errorContainer.style.background = "#F97D71";
-            error.style.opacity = "1";
-            error.textContent = "Something wrong happened, thanks to reload this page.";
+            showError();
     }
 };
 
@@ -238,6 +230,7 @@ function setMode(modeValue) {
 function init(splitter) {
     inputVal = input.value;
     resultString = "";
+    errorList = [];
     if (mode === 1) {
         inputVal = inputVal.toLowerCase();
     }
@@ -256,28 +249,38 @@ function Translation(usedMap, str) {
             buildResultStr(usedMap, character);
         }
     }
-    for (char of errorList) {
-        if (input.value.includes(char) === false) {
-            errorList.splice(char, 1);
-        }
-    }
+    // for (char of errorList) {
+    //     if (input.value.includes(char) === false) {
+    //         errorList.splice(char, 1);
+    //     }
+    // }
     showError();
 }
+
 
 /**
  * Shows and hides errors
  */
 function showError() {
+    const errorCharacters = "Unknown.s character.s, please remove : ";
+    const errorMode = "Something wrong happened, thanks to reload this page.";
+    let errorMessage = "", problematicChar = errorList[0];
+    if (mode !== 1 && mode !== 2 && mode !== 3) {
+        errorMessage = errorMode;
+    } else if (errorList.length > 0) {
+        if (errorList[0].length > 60) {
+            problematicChar = errorList[0].length.substring(0, 60);
+        }
+        errorMessage = errorCharacters + problematicChar;
+    }
+
     errorDisplayed = errorList.length === 0 ? errorDisplayed = false : errorDisplayed = true;
 
-    if (errorDisplayed) {
-        errorContainer.setAttribute("aria-hidden", "false");
-        errorContainer.style.background = "#F97D71";
-        error.style.opacity = "1";
-        error.textContent = "Unknown.s character.s, please remove every : " + errorList[length];
+    if (errorDisplayed || mode !== 1 && mode !== 2 && mode !== 3) {
+        error.textContent = errorMessage;
+        errorContainer.style.display = "flex";
     } else {
-        errorContainer.style.background = "";
-        error.style.opacity = "0"
+        errorContainer.style.display = "none";
     }
 }
 
@@ -295,13 +298,8 @@ function buildResultStr(usedMap, character) {
         case 3:
             resultString += usedMap.get(character);
             break;
-        // case 3:
-        //     if (usedMap.get(character) !== undefined) {
-        //         resultString += usedMap.get(character);
-        //     }
-        //     break;
         default:
-            console.error("Y'a une errreur");
+            showError();
     }
 }
 
