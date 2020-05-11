@@ -263,7 +263,7 @@ function Translation(usedMap, str) {
  * If a wrong "character" is too long, reduces him to 60 characters
  */
 function showError() {
-    const errorCharacters = "Unknown.s character.s, please remove : ";
+    const errorCharacters = "Unknown character.s, please remove : ";
     const errorMode = "Oh boy ! Something wrong happened, please reload this page.";
     let errorMessage = "", problematicChar = errorList[0];
     if (mode !== 1 && mode !== 2 && mode !== 3) {
